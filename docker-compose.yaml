@@ -1,0 +1,40 @@
+version: "3"
+services:
+  digitalungdom-api:
+    container_name: digitalungdom-api
+    build:
+      context: .
+    ports:
+      - "8080:80"
+    expose:
+      - "80"
+    networks:
+      - digitalungdom
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    env_file: .env
+    # volumes:
+    #   - "./dontpush/store:/store"
+    #   - "./dontpush/tmp:/tmp"
+
+  mongo:
+    image: mongo
+    container_name: du-mongo
+    restart: always
+    networks:
+      - digitalungdom
+    expose:
+      - 27017
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+      - MONGO_INITDB_DATABASE=digitalungdom
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+networks:
+  digitalungdom:
