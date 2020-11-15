@@ -25,6 +25,8 @@ async function register(req: Request, res: Response): Promise<void> {
       firstName: userData.details.firstName,
       lastName: userData.details.lastName,
       username: userData.details.username,
+      gender: userData.details.gender,
+      birthdate: userData.details.birthdate,
     },
   };
 
@@ -43,6 +45,8 @@ async function auth(req: Request, res: Response): Promise<void> {
       firstName: userData.details.firstName,
       lastName: userData.details.lastName,
       username: userData.details.username,
+      gender: userData.details.gender,
+      birthdate: userData.details.birthdate,
     },
   };
 

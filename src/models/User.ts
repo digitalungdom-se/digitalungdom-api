@@ -36,6 +36,9 @@ class UserDetails {
   @prop({ type: mongoose.SchemaTypes.String })
   public username!: string;
 
+  @prop({ type: mongoose.SchemaTypes.Date })
+  public birthdate!: Date;
+
   @prop({ enum: Gender, type: mongoose.SchemaTypes.String })
   public gender!: Gender;
 }

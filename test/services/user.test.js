@@ -26,6 +26,8 @@ describe("User", function () {
       expect(response.body.details.firstName).toBe(firstName);
       expect(response.body.details.lastName).toBe(lastName);
       expect(response.body.details.username).toBe(username);
+      expect(response.body.details.gender).toBe(gender);
+      expect(response.body.details.birthdate).toBe(birthdate);
     });
   });
 
@@ -77,6 +79,8 @@ describe("User", function () {
       expect(response.body.details.firstName).toBe(u.firstName);
       expect(response.body.details.lastName).toBe(u.lastName);
       expect(response.body.details.username).toBe(u.username);
+      expect(response.body.details.gender).toBe(u.gender);
+      expect(response.body.details.birthdate).toBe(u.birthdate);
     });
 
     it("should return 404", async () => {

@@ -18,6 +18,8 @@ export interface IUserPrivate {
     firstName: string;
     lastName: string;
     username: string;
+    gender: string;
+    birthdate: Date;
   };
 }
 
