@@ -1,7 +1,6 @@
 import { DocumentType } from "@typegoose/typegoose";
 import moment from "moment";
 import { MailService } from "@sendgrid/mail";
-import { rword } from "rword";
 import { ObjectID } from "mongodb";
 import fs from "fs-extra";
 import path from "path";
@@ -9,7 +8,7 @@ import path from "path";
 import { UserModel, User, TokenModel, TokenType } from "models";
 import { AuthenticationService } from "services";
 import { IReturnToken, IUserInput } from "interfaces";
-import { generateSimpleEmail, randomBase62String } from "utils";
+import { generateSimpleEmail, randomBase62String, randomWordArray } from "utils";
 import { Config } from "configs";
 
 export class UserService {
@@ -38,7 +37,7 @@ export class UserService {
   public async sendEmailLoginCode(email: string): Promise<string> {
     const user = (await this.User.findOne({ "details.email.normalised": email }))!;
 
-    const emailLoginCode = (rword.generateFromPool(6) as Array<string>).join("-");
+    const emailLoginCode = [...randomWordArray(5), randomBase62String(7)].join("-");
     const tokenExpires = moment.utc().add(5, "minutes").toDate();
 
     await this.Token.create({ type: TokenType.EmailLoginCode, value: emailLoginCode, expires: tokenExpires, user: user._id });

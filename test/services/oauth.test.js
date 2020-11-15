@@ -1,5 +1,4 @@
 const supertest = require("supertest");
-
 const Profile = require("../profile");
 
 const request = supertest("http://localhost:8080");
