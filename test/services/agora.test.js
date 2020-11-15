@@ -226,5 +226,25 @@ describe("AGORA", function () {
       getAgoragramResp = await u.get(`/agoragram/${a._id}`, {});
       expect(getAgoragramResp.body[0].starred).toBeUndefined();
     });
+
+    it("should return 200 on comment", async () => {
+      const p = new Profile(request);
+      const u = await p.createUser();
+      const a = await u.createPost();
+      const c = await u.createComment(a);
+
+      let response = await u.post(`/agoragram/${c._id}/star`, {});
+      expect(response.status).toBe(200);
+      expect(response.body.action).toBe("STARRED");
+
+      let getAgoragramResp = await u.get(`/agoragram/${c._id}`, {});
+      expect(getAgoragramResp.body[0].starred).toBe(true);
+
+      response = await u.post(`/agoragram/${c._id}/star`, {});
+      expect(response.body.action).toBe("UNSTARRED");
+
+      getAgoragramResp = await u.get(`/agoragram/${c._id}`, {});
+      expect(getAgoragramResp.body[0].starred).toBeUndefined();
+    });
   });
 });

@@ -81,6 +81,13 @@ class User {
     return post;
   }
 
+  async createComment(agoragram) {
+    const comment = new Comment(this, agoragram);
+    await comment.create();
+
+    return comment;
+  }
+
   async get(route, query) {
     return await this.request.get(route).query(query).set("Authorization", `Bearer ${this.accessToken}`);
   }
