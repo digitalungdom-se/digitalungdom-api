@@ -8,9 +8,9 @@ const getPosts = [
   query("sort").isString().isIn(["NEW", "TOP"]),
   query("skip").isInt({ min: 0 }).toInt(),
   query("limit").isInt({ min: 1, max: 100 }).toInt(),
-  query("fromID").optional({ nullable: false, checkFalsy: true }).isString().isMongoId().customSanitizer(sanitizers.toObjectID),
-  query("hypagora").optional({ nullable: false, checkFalsy: true }).isString().isMongoId().customSanitizer(sanitizers.toObjectID),
-  query("authorID").optional({ nullable: false, checkFalsy: true }).isString().isMongoId().customSanitizer(sanitizers.toObjectID),
+  query("fromID").optional({ nullable: true, checkFalsy: true }).isString().isMongoId().customSanitizer(sanitizers.toObjectID),
+  query("hypagora").optional({ nullable: true, checkFalsy: true }).isString().isMongoId().customSanitizer(sanitizers.toObjectID),
+  query("authorID").optional({ nullable: true, checkFalsy: true }).isString().isMongoId().customSanitizer(sanitizers.toObjectID),
 ];
 
 const createAgoragram = [body("body").isString().isLength({ min: 0, max: 10000 })];

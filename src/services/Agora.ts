@@ -142,7 +142,7 @@ export class AgoraService {
     queryArray = [];
 
     if (starredAgoragram && starredAgoragram.replyTo) {
-      const children = (await this.Agoragram.findOneAndUpdate({ "_id": starredAgoragram.replyTo, "children._id": agoragramID }, { $inc: { "children.$.stars": star } }, { projection: { _id: 0, children: 1 }, new: true }))!.children!.sort(
+      const children = (await this.Agoragram.findOneAndUpdate({ "_id": starredAgoragram.replyTo, "children.agoragram": agoragramID }, { $inc: { "children.$.stars": star } }, { projection: { _id: 0, children: 1 }, new: true }))!.children!.sort(
         (a, b) => b.stars! - a.stars!,
       );
 

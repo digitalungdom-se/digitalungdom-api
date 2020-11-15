@@ -2,9 +2,9 @@ import { body, query, param } from "express-validator";
 import { Request } from "express";
 
 const getUser = [
-  query("email").optional({ nullable: false, checkFalsy: true }).isString().isEmail().normalizeEmail(),
-  query("username").optional({ nullable: false, checkFalsy: true }).isString().isLength({ max: 128 }),
-  query("_id").optional({ nullable: false, checkFalsy: true }).isString().isMongoId(),
+  query("email").optional({ nullable: true, checkFalsy: true }).isString().isEmail().normalizeEmail(),
+  query("username").optional({ nullable: true, checkFalsy: true }).isString().isLength({ max: 128 }),
+  query("_id").optional({ nullable: true, checkFalsy: true }).isString().isMongoId(),
 ];
 
 const sendEmailLoginCode = [
@@ -65,7 +65,7 @@ const register = [
 
 const updateUser = [
   body("username")
-    .optional({ nullable: false, checkFalsy: true })
+    .optional({ nullable: true, checkFalsy: true })
     .isString()
     .isLength({ min: 3, max: 24 })
     .matches(/^(\w+)$/)
@@ -81,15 +81,15 @@ const updateUser = [
       return true;
     }),
 
-  body("firstName").optional({ nullable: false, checkFalsy: true }).isString().isLength({ min: 1, max: 512 }),
-  body("lastName").optional({ nullable: false, checkFalsy: true }).isString().isLength({ min: 1, max: 512 }),
-  body("birthdate").optional({ nullable: false, checkFalsy: true }).isISO8601({ strict: true }).isBefore().toDate(),
-  body("gender").optional({ nullable: false, checkFalsy: true }).isString().isIn(["MALE", "FEMALE", "OTHER", "UNDISCLOSED"]),
-  body("profileColour").optional({ nullable: false, checkFalsy: true }).isString().isHexColor(),
-  body("profileStatus").optional({ nullable: false, checkFalsy: true }).isString().isLength({ min: 0, max: 32 }),
-  body("profileBio").optional({ nullable: false, checkFalsy: true }).isString().isLength({ min: 0, max: 1000 }),
+  body("firstName").optional({ nullable: true, checkFalsy: true }).isString().isLength({ min: 1, max: 512 }),
+  body("lastName").optional({ nullable: true, checkFalsy: true }).isString().isLength({ min: 1, max: 512 }),
+  body("birthdate").optional({ nullable: true, checkFalsy: true }).isISO8601({ strict: true }).isBefore().toDate(),
+  body("gender").optional({ nullable: true, checkFalsy: true }).isString().isIn(["MALE", "FEMALE", "OTHER", "UNDISCLOSED"]),
+  body("profileColour").optional({ nullable: true, checkFalsy: true }).isString().isHexColor(),
+  body("profileStatus").optional({ nullable: true, checkFalsy: true }).isString().isLength({ min: 0, max: 32 }),
+  body("profileBio").optional({ nullable: true, checkFalsy: true }).isString().isLength({ min: 0, max: 1000 }),
   body("profileURL")
-    .optional({ nullable: false, checkFalsy: true })
+    .optional({ nullable: true, checkFalsy: true })
     .isString()
     .isURL({ protocols: ["http", "https"] }),
 ];
