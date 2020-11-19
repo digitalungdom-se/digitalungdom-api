@@ -9,6 +9,7 @@ import { ObjectID } from "mongodb";
 import { cleanObject } from "utils";
 
 const sizeOf = promisify(imageSize);
+sharp.cache(false);
 
 async function register(req: Request, res: Response): Promise<void> {
   const userInput: IUserInput = {
