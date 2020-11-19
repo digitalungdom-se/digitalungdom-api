@@ -87,7 +87,7 @@ class App {
             // body: req.body,
             // query: req.query,
             // params: req.params,
-            // headers: req.headers,
+            headers: req.headers,
           };
 
           meta.res = {
@@ -163,7 +163,7 @@ class App {
             // body: req.body,
             // query: req.query,
             // params: req.params,
-            // headers: req.headers,
+            headers: req.headers,
           };
 
           meta.res = {

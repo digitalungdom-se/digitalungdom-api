@@ -90,6 +90,6 @@ const updateUser = [
     .isURL({ protocols: ["http", "https"] }),
 ];
 
-const getProfilePicture = [param("userID").isString().isMongoId(), query("size").optional({ checkFalsy: true, nullable: false }).isInt({ min: 0, max: 1024 }).toInt()];
+const getProfilePicture = [param("userID").isString().isMongoId(), query("size").optional().isInt({ min: 1 }).toInt()];
 
 export default { getUser, register, updateUser, sendEmailLoginCode, getProfilePicture };

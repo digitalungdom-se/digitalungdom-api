@@ -12,7 +12,7 @@ async function getPosts(req: Request, res: Response): Promise<void> {
   const limit = (req.query.limit as any) as number;
   const fromID = req.query.fromID as undefined | ObjectID;
   const hypagora = req.query.hypagora as undefined | ObjectID;
-  const authorID = req.query.author as undefined | ObjectID;
+  const authorID = req.query.authorID as undefined | ObjectID;
 
   const posts = await req.services.Agora.getPosts(sort, skip, limit, { fromID, hypagora, authorID });
 

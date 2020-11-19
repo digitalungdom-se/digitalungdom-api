@@ -3,8 +3,12 @@ import { IUserPrivate, IUserInput, IUserPublic } from "interfaces";
 import fileType from "file-type";
 import fs from "fs-extra";
 import sharp from "sharp";
+import imageSize from "image-size";
+import { promisify } from "util";
 import { ObjectID } from "mongodb";
 import { cleanObject } from "utils";
+
+const sizeOf = promisify(imageSize);
 
 async function register(req: Request, res: Response): Promise<void> {
   const userInput: IUserInput = {
@@ -112,9 +116,14 @@ async function setProfilePicture(req: Request, res: Response): Promise<void> {
   const userID = req.user!._id;
   const tmpFilePath = req.file.path;
 
-  const ft = await fileType.fromFile(tmpFilePath);
+  if (!tmpFilePath) {
+    res.sendStatus(422);
+    return;
+  }
 
-  if (!ft || !["image/png", "image/jpeg", "image/gif"].includes(ft.mime)) {
+  const [ft, imgSize] = await Promise.all([fileType.fromFile(tmpFilePath), sizeOf(tmpFilePath)]);
+
+  if (!ft || !["image/png", "image/jpeg", "image/gif"].includes(ft.mime) || !imgSize || !imgSize.width || !imgSize.height || imgSize.width / imgSize.height !== 1) {
     await fs.remove(tmpFilePath);
     res.sendStatus(422);
     return;
@@ -127,7 +136,7 @@ async function setProfilePicture(req: Request, res: Response): Promise<void> {
 
 async function getProfilePicture(req: Request, res: Response): Promise<void> {
   const userID = new ObjectID(req.params.userID);
-  const size = ((req.query.size as any) as number) || 0;
+  const size = req.query.size as number | undefined;
 
   const profilePicturePath = req.services.User.getProfilePicturePath(userID);
 
@@ -137,8 +146,13 @@ async function getProfilePicture(req: Request, res: Response): Promise<void> {
     return;
   }
 
-  const profilePicture = await sharp(profilePicturePath).resize(size).toBuffer();
-  const ft = await fileType.fromBuffer(profilePicture);
+  const ft = await fileType.fromFile(profilePicturePath);
+  let profilePicture;
+  if (size) {
+    profilePicture = await sharp(profilePicturePath).resize(size).toBuffer();
+  } else {
+    profilePicture = await fs.readFile(profilePicturePath);
+  }
 
   res.contentType(ft!.mime);
   res.send(profilePicture);
