@@ -34,6 +34,7 @@ router.get("/user/@me", ensureUserAuthenticated, controllerWrapper(controllers.u
 router.put("/user/@me", ensureUserAuthenticated, validatorWrapper(validators.user.updateUser), controllerWrapper(controllers.user.updateUser));
 router.delete("/user/@me", ensureUserAuthenticated, controllerWrapper(controllers.user.deleteUser));
 router.post("/user/@me/profile_picture", ensureUserAuthenticated, upload.single("profilePicture"), controllerWrapper(controllers.user.setProfilePicture));
+router.delete("/user/@me/profile_picture", ensureUserAuthenticated, controllerWrapper(controllers.user.deleteProfilePicture));
 router.get("/user/:userID/profile_picture", validatorWrapper(validators.user.getProfilePicture), controllerWrapper(controllers.user.getProfilePicture));
 
 router.get("/agoragram", validatorWrapper(validators.agora.getPosts), controllerWrapper(controllers.agora.getPosts));

@@ -142,7 +142,7 @@ describe("User", function () {
   });
 
   describe("POST /user/@me/profile_picture", function () {
-    it("should return 204", async () => {
+    it("should return 201", async () => {
       const p = new Profile(request);
       const u = await p.createUser();
 
@@ -153,15 +153,32 @@ describe("User", function () {
   });
 
   describe("GET /user/:userID/profile_picture", function () {
+    it("should return 200", async () => {
+      const p = new Profile(request);
+      const u = await p.createUser();
+
+      await request.post("/user/@me/profile_picture").set("Authorization", `Bearer ${u.accessToken}`).attach("profilePicture", "test/assets/robotFaceIcon.png");
+
+      let response = await request.get(`/user/${u._id}/profile_picture`).query({ size: 100 });
+      expect(response.status).toBe(200);
+
+      response = await request.get(`/user/${u._id}/profile_picture`);
+      expect(response.status).toBe(200);
+    });
+  });
+
+  describe("DELETE /user/@me/profile_picture", function () {
     it("should return 204", async () => {
       const p = new Profile(request);
       const u = await p.createUser();
 
       await request.post("/user/@me/profile_picture").set("Authorization", `Bearer ${u.accessToken}`).attach("profilePicture", "test/assets/robotFaceIcon.png");
 
-      const response = await request.get(`/user/${u._id}/profile_picture`).query({ size: 100 });
+      let response = await request.delete("/user/@me/profile_picture").set("Authorization", `Bearer ${u.accessToken}`).attach("profilePicture", "test/assets/robotFaceIcon.png");
+      expect(response.status).toBe(204);
 
-      expect(response.status).toBe(200);
+      response = await request.get(`/user/${u._id}/profile_picture`);
+      expect(response.status).toBe(404);
     });
   });
 });

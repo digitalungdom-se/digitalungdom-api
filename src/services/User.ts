@@ -78,6 +78,14 @@ export class UserService {
     await fs.move(tmpPath, this.getProfilePicturePath(userID), { overwrite: true });
   }
 
+  public async deleteProfilePicture(userID: ObjectID): Promise<void> {
+    const profilePicturePath = this.getProfilePicturePath(userID);
+    const exists = await fs.pathExists(profilePicturePath);
+    if (exists) {
+      await fs.remove(profilePicturePath);
+    }
+  }
+
   public getProfilePicturePath(userID: ObjectID): string {
     return path.join(this.config.storageDir, "profile_pictures", userID.toHexString());
   }

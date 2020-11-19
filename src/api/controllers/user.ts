@@ -135,6 +135,14 @@ async function setProfilePicture(req: Request, res: Response): Promise<void> {
   res.sendStatus(201);
 }
 
+async function deleteProfilePicture(req: Request, res: Response): Promise<void> {
+  const userID = req.user!._id;
+
+  await req.services.User.deleteProfilePicture(userID);
+
+  res.sendStatus(204);
+}
+
 async function getProfilePicture(req: Request, res: Response): Promise<void> {
   const userID = new ObjectID(req.params.userID);
   const size = req.query.size as number | undefined;
@@ -178,4 +186,4 @@ async function updateUser(req: Request, res: Response): Promise<void> {
   res.sendStatus(204);
 }
 
-export default { register, sendEmailLoginCode, auth, getUser, deleteUser, setProfilePicture, getProfilePicture, updateUser };
+export default { register, sendEmailLoginCode, auth, getUser, deleteUser, setProfilePicture, getProfilePicture, updateUser, deleteProfilePicture };
