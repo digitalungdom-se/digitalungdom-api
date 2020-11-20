@@ -89,16 +89,16 @@ export class AgoraService {
     ];
 
     if (replyTo.type === AgoragramType.Comment) {
-      if ((replyTo.author as ObjectID).toHexString() !== authorID.toHexString()) {
+      if (replyTo.author && (replyTo.author as ObjectID).toHexString() !== authorID.toHexString()) {
         promisedArray.push(this.Notification.newNotification(replyTo.author as ObjectID, UserNotificationType.CommentOnComment, { comment: replyTo._id, post: replyTo.post!._id }).then());
       }
 
       const post = await this.Agoragram.findOne({ _id: replyTo.post!._id });
 
-      if ((post!.author as ObjectID).toHexString() !== authorID.toHexString()) {
+      if (post?.author && (post.author as ObjectID).toHexString() !== authorID.toHexString()) {
         promisedArray.push(this.Notification.newNotification(post!.author as ObjectID, UserNotificationType.CommentOnPost, { post: post!._id }).then());
       }
-    } else if ((replyTo.author as ObjectID).toHexString() !== authorID.toHexString()) {
+    } else if (replyTo.author && (replyTo.author as ObjectID).toHexString() !== authorID.toHexString()) {
       promisedArray.push(this.Notification.newNotification(replyTo.author as ObjectID, UserNotificationType.CommentOnPost, { post: replyTo._id }).then());
     }
 
