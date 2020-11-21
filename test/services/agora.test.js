@@ -96,7 +96,7 @@ describe("AGORA", function () {
       expect(agoragram.type).toBeDefined();
       expect(agoragram.tags).toBeDefined();
       expect(agoragram.display.type).toBe("USER");
-      expect(agoragram.starred).toBeUndefined();
+      expect(agoragram.starred).toBe(false);
     });
   });
 
@@ -136,7 +136,7 @@ describe("AGORA", function () {
       expect(post.type).toBe("TEXT");
       expect(post.tags).toMatchObject(a.tags);
       expect(post.display.type).toBe("USER");
-      expect(post.starred).toBeUndefined();
+      expect(post.starred).toBe(false);
 
       expect(returnedComment._id).toBe(comment._id);
       expect(returnedComment.author._id).toBe(u._id);
@@ -154,7 +154,7 @@ describe("AGORA", function () {
       expect(returnedComment.type).toBe("COMMENT");
       expect(returnedComment.tags).toBeUndefined();
       expect(returnedComment.display.type).toBe("USER");
-      expect(returnedComment.starred).toBeUndefined();
+      expect(returnedComment.starred).toBe(false);
     });
   });
 
@@ -182,7 +182,6 @@ describe("AGORA", function () {
       expect(response.body.type).toBe("TEXT");
       expect(response.body.tags).toMatchObject(a.tags);
       expect(response.body.display.type).toBe("USER");
-      expect(response.body.starred).toBeUndefined();
 
       const getAgoragramResp = await u.get(`/agoragram/${a._id}`, {});
 
@@ -224,7 +223,7 @@ describe("AGORA", function () {
       expect(response.body.action).toBe("UNSTARRED");
 
       getAgoragramResp = await u.get(`/agoragram/${a._id}`, {});
-      expect(getAgoragramResp.body[0].starred).toBeUndefined();
+      expect(getAgoragramResp.body[0].starred).toBe(false);
     });
 
     it("should return 200 on comment", async () => {
@@ -244,7 +243,7 @@ describe("AGORA", function () {
       expect(response.body.action).toBe("UNSTARRED");
 
       getAgoragramResp = await u.get(`/agoragram/${c._id}`, {});
-      expect(getAgoragramResp.body[0].starred).toBeUndefined();
+      expect(getAgoragramResp.body[0].starred).toBe(false);
     });
   });
 });

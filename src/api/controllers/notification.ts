@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
-import { IUserNotification } from "interfaces";
 
 async function getNotifications(req: Request, res: Response): Promise<void> {
   const userID = req.user!._id;
   const skip = (req.query.skip as any) as number;
   const limit = (req.query.limit as any) as number;
 
-  const notifications: Array<IUserNotification> = await req.services.Notification.getNotifications(userID, skip, limit);
+  const notifications = await req.services.Notification.getNotifications(userID, skip, limit);
 
   res.status(200).json(notifications);
 }

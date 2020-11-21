@@ -3,7 +3,7 @@ import moment from "moment";
 import { ObjectID } from "mongodb";
 
 import { UserModel, AgoragramModel, Agoragram, AgoragramType, NotificationModel, NotificationType, NotificationReportType, UserNotificationType } from "models";
-import { IPostCreate, ICommentCreate } from "interfaces";
+import { IPostCreate, ICommentCreate, IAgoragram } from "interfaces";
 import { NotificationService } from "./Notification";
 
 export class AgoraService {
@@ -229,5 +229,45 @@ export class AgoraService {
     const [agoragrams, users] = await Promise.all(promiseArray);
 
     return { agoragrams, users };
+  }
+
+  public toAgoragramPost(agoragram: DocumentType<Agoragram>): IAgoragram {
+    return {
+      _id: agoragram._id,
+      author: agoragram.author as any,
+      shortID: agoragram.shortID!,
+      title: agoragram.title,
+      body: agoragram.body,
+      modified: agoragram.modified!,
+      pinned: agoragram.pinned!,
+      deleted: agoragram.deleted!,
+      stars: agoragram.stars!,
+      commentAmount: agoragram.commentAmount!,
+      children: agoragram.children as any,
+      type: agoragram.type,
+      tags: agoragram.tags!,
+      display: agoragram.display,
+    };
+  }
+
+  public toAgoragramPostAndComments(agoragram: DocumentType<Agoragram>): IAgoragram {
+    return {
+      _id: agoragram._id,
+      author: agoragram.author as any,
+      shortID: agoragram.shortID!,
+      title: agoragram.title,
+      body: agoragram.body,
+      modified: agoragram.modified!,
+      pinned: agoragram.pinned!,
+      deleted: agoragram.deleted!,
+      stars: agoragram.stars!,
+      commentAmount: agoragram.commentAmount!,
+      children: agoragram.children as any,
+      type: agoragram.type,
+      tags: agoragram.tags!,
+      display: agoragram.display,
+      post: agoragram.post as any,
+      replyTo: agoragram.replyTo as any,
+    };
   }
 }

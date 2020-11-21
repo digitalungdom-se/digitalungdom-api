@@ -7,7 +7,7 @@ import path from "path";
 
 import { UserModel, User, TokenModel, TokenType } from "models";
 import { AuthenticationService } from "services";
-import { IReturnToken, IUserInput } from "interfaces";
+import { IReturnToken, IUserInput, IUserPrivate, IUserPublic } from "interfaces";
 import { generateSimpleEmail, randomBase58String, randomBase62String, randomWordArray } from "utils";
 import { Config } from "configs";
 
@@ -88,5 +88,34 @@ export class UserService {
 
   public getProfilePicturePath(userID: ObjectID): string {
     return path.join(this.config.storageDir, "profile_pictures", userID.toHexString());
+  }
+
+  public toUserPrivate(user: DocumentType<User>): IUserPrivate {
+    return {
+      _id: user._id,
+      details: {
+        email: user.details.email,
+        firstName: user.details.firstName,
+        lastName: user.details.lastName,
+        username: user.details.username,
+        gender: user.details.gender,
+        birthdate: user.details.birthdate,
+      },
+    };
+  }
+
+  public toUserPublic(user: DocumentType<User>): IUserPublic {
+    return {
+      _id: user._id,
+      details: {
+        username: user.details.username,
+        firstName: user.details.firstName,
+        lastName: user.details.lastName,
+      },
+      agora: {
+        profile: user.agora!.profile as any,
+        score: user.agora!.score,
+      },
+    };
   }
 }

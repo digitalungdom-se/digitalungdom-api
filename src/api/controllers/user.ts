@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IUserPrivate, IUserInput, IUserPublic } from "interfaces";
+import { IUserInput } from "interfaces";
 import fileType from "file-type";
 import fs from "fs-extra";
 import sharp from "sharp";
@@ -21,41 +21,21 @@ async function register(req: Request, res: Response): Promise<void> {
     birthdate: req.body.birthdate,
   };
 
-  const userData = await req.services.User.register(userInput);
+  const user = await req.services.User.register(userInput);
 
-  const user: IUserPrivate = {
-    _id: userData._id,
-    details: {
-      email: userData.details.email,
-      firstName: userData.details.firstName,
-      lastName: userData.details.lastName,
-      username: userData.details.username,
-      gender: userData.details.gender,
-      birthdate: userData.details.birthdate,
-    },
-  };
+  const userReturn = req.services.User.toUserPrivate(user!);
 
-  res.status(201).json(user);
+  res.status(201).json(userReturn);
 }
 
 async function auth(req: Request, res: Response): Promise<void> {
   const userID = req.user!._id;
 
-  const userData = (await req.services.User.getUserByID(userID))!;
+  const user = await req.services.User.getUserByID(userID);
 
-  const user: IUserPrivate = {
-    _id: userData._id,
-    details: {
-      email: userData.details.email,
-      firstName: userData.details.firstName,
-      lastName: userData.details.lastName,
-      username: userData.details.username,
-      gender: userData.details.gender,
-      birthdate: userData.details.birthdate,
-    },
-  };
+  const userReturn = req.services.User.toUserPrivate(user!);
 
-  res.status(200).json(user);
+  res.status(200).json(userReturn);
 }
 
 async function sendEmailLoginCode(req: Request, res: Response): Promise<void> {
@@ -89,18 +69,7 @@ async function getUser(req: Request, res: Response): Promise<void> {
     return;
   }
 
-  const userReturn: IUserPublic = {
-    _id: user._id,
-    details: {
-      username: user.details.username,
-      firstName: user.details.firstName,
-      lastName: user.details.lastName,
-    },
-    agora: {
-      profile: user.agora!.profile as any,
-      score: user.agora!.score,
-    },
-  };
+  const userReturn = req.services.User.toUserPublic(user);
 
   res.status(200).json(userReturn);
 }
