@@ -19,7 +19,7 @@ class Email {
   @prop({ type: mongoose.SchemaTypes.String })
   public raw!: string;
 
-  @prop({ type: mongoose.SchemaTypes.String, index: true })
+  @prop({ type: mongoose.SchemaTypes.String })
   public normalised?: string;
 }
 
@@ -35,6 +35,9 @@ class UserDetails {
 
   @prop({ type: mongoose.SchemaTypes.String })
   public username!: string;
+
+  @prop({ type: mongoose.SchemaTypes.String })
+  public password?: string;
 
   @prop({ type: mongoose.SchemaTypes.Date })
   public birthdate!: Date;
@@ -95,9 +98,6 @@ class UserNotification {
   @prop({ type: mongoose.SchemaTypes.ObjectId })
   public _id!: ObjectID;
 
-  @prop({ type: mongoose.SchemaTypes.Date })
-  public at!: Date;
-
   @prop({ enum: UserNotificationType, type: mongoose.SchemaTypes.String })
   public type!: UserNotificationType;
 
@@ -105,7 +105,7 @@ class UserNotification {
   public data?: any;
 
   @prop({ default: false, type: mongoose.SchemaTypes.Boolean })
-  public read!: boolean;
+  public read?: boolean;
 }
 
 @pre<User>("save", async function () {

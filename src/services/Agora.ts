@@ -264,7 +264,7 @@ export class AgoraService {
       commentAmount: agoragram.commentAmount!,
       children: agoragram.children as any,
       type: agoragram.type,
-      tags: agoragram.tags!,
+      tags: agoragram.tags,
       display: agoragram.display,
       post: agoragram.post as any,
       replyTo: agoragram.replyTo as any,

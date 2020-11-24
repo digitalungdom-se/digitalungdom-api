@@ -1,4 +1,5 @@
 const supertest = require("supertest");
+const ObjectID = require("mongodb").ObjectID;
 
 const Profile = require("../profile");
 
@@ -21,14 +22,24 @@ describe("NOTIFICATION", function () {
       expect(response.body.length).toBe(3);
       expect(response.body[0].type).toBe("COMMENT_ON_POST");
       expect(response.body[0]._id).toBeDefined();
-      expect(response.body[0].at).toBeDefined();
-      expect(response.body[0].read).toBe(false);
+      expect(response.body[0].read).toBeUndefined();
       expect(response.body[0].data.post).toBeDefined();
       expect(response.body[1].type).toBe("COMMENT_ON_POST");
       expect(response.body[1]._id).toBeDefined();
-      expect(response.body[1].at).toBeDefined();
-      expect(response.body[1].read).toBe(false);
+      expect(response.body[1].read).toBeUndefined();
       expect(response.body[1].data.post).toBeDefined();
+
+      let prevNotification;
+      for (const notification of response.body) {
+        if (!prevNotification) {
+          prevNotification = notification;
+          continue;
+        }
+
+        expect(new ObjectID(notification._id).generationTime).toBeLessThanOrEqual(new ObjectID(prevNotification._id).generationTime);
+
+        prevNotification = notification;
+      }
 
       const middleID = response.body[1]._id;
 
@@ -37,15 +48,38 @@ describe("NOTIFICATION", function () {
       expect(response.body.length).toBe(1);
       expect(response.body[0].type).toBe("COMMENT_ON_COMMENT");
       expect(response.body[0]._id).toBeDefined();
-      expect(response.body[0].at).toBeDefined();
-      expect(response.body[0].read).toBe(false);
+      expect(response.body[0].read).toBeUndefined();
       expect(response.body[0].data.post).toBeDefined();
       expect(response.body[0].data.comment).toBeDefined();
 
-      response = await u[0].get("/notification", { skip: 1, limit: 1 });
+      prevNotification = undefined;
+      for (const notification of response.body) {
+        if (!prevNotification) {
+          prevNotification = notification;
+          continue;
+        }
+
+        expect(new ObjectID(notification._id).generationTime).toBeLessThanOrEqual(new ObjectID(prevNotification._id).generationTime);
+
+        prevNotification = notification;
+      }
+
+      response = await u[0].get("/notification", { skip: 1, limit: 2 });
       expect(response.status).toBe(200);
-      expect(response.body.length).toBe(1);
+      expect(response.body.length).toBe(2);
       expect(response.body[0]._id).toBe(middleID);
+
+      prevNotification = undefined;
+      for (const notification of response.body) {
+        if (!prevNotification) {
+          prevNotification = notification;
+          continue;
+        }
+
+        expect(new ObjectID(notification._id).generationTime).toBeLessThanOrEqual(new ObjectID(prevNotification._id).generationTime);
+
+        prevNotification = notification;
+      }
     });
   });
 
@@ -64,9 +98,9 @@ describe("NOTIFICATION", function () {
 
       notifications = (await u[0].get("/notification", { skip: 0, limit: 10 })).body;
 
-      expect(notifications[0].read).toBe(false);
+      expect(notifications[0].read).toBeUndefined();
       expect(notifications[1].read).toBe(true);
-      expect(notifications[2].read).toBe(false);
+      expect(notifications[2].read).toBeUndefined();
 
       response = await u[0].put("/notification", {});
       expect(response.status).toBe(204);
