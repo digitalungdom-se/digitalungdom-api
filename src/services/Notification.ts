@@ -19,9 +19,9 @@ export class NotificationService {
   }
 
   public async getNotifications(userID: ObjectID, skip: number, limit: number): Promise<Array<IUserNotification>> {
-    const user = await this.User.findOne({ _id: userID }, { _id: 0, notifications: { $slice: [-skip - limit, limit] } });
+    const user = await this.User.findOne({ _id: userID }, { _id: 0, notifications: 1 });
 
-    return (user?.notifications || []).reverse();
+    return (user?.notifications || []).reverse().slice(skip, skip + limit);
   }
 
   public async readNotifications(userID: ObjectID, notificationIDs: Array<ObjectID>): Promise<void> {
