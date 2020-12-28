@@ -32,6 +32,7 @@ interface Config {
   sendGrid: {
     apiKey: string;
     email: string;
+    name: string;
     emailTemplates: { login: string };
   };
 
@@ -64,6 +65,7 @@ const config: Config = {
   sendGrid: {
     apiKey: process.env.SEND_GRID_API_KEY!,
     email: process.env.SEND_GRID_EMAIL!,
+    name: process.env.SEND_GRID_NAME!,
     emailTemplates: {
       login: "d-aa545cbb855242a09f6fc7333861fc7b",
     },

@@ -5,7 +5,7 @@ import { config } from "configs";
 export function generateSimpleEmail(to: string, templateId: string, dynamicTemplateData?: any): MailDataRequired {
   const msg: MailDataRequired = {
     to,
-    from: config.sendGrid.email,
+    from: { email: config.sendGrid.email, name: config.sendGrid.name },
     templateId,
     dynamicTemplateData,
   };
