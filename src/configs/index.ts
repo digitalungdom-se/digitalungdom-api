@@ -65,7 +65,7 @@ const config: Config = {
     apiKey: process.env.SEND_GRID_API_KEY!,
     email: process.env.SEND_GRID_EMAIL!,
     emailTemplates: {
-      login: "d-4fddcdbdc85f404882bb39ecadae521c",
+      login: "d-aa545cbb855242a09f6fc7333861fc7b",
     },
   },
 

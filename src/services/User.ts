@@ -40,9 +40,11 @@ export class UserService {
     const emailLoginCode = [...randomWordArray(4), randomBase58String(4)].join("-");
     const tokenExpires = moment.utc().add(5, "minutes").toDate();
 
+    const authorisationToken = Buffer.from(`${email}:${emailLoginCode}`).toString("base64");
+
     await this.Token.create({ type: TokenType.EmailLoginCode, value: emailLoginCode, expires: tokenExpires, user: user._id });
 
-    const emailData = generateSimpleEmail(email, this.config.sendGrid.emailTemplates.login, { login_code: emailLoginCode });
+    const emailData = generateSimpleEmail(email, this.config.sendGrid.emailTemplates.login, { login_code: emailLoginCode, authorization_token: authorisationToken });
 
     await this.Mail.send(emailData);
 
